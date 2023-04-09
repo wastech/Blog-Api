@@ -8,17 +8,13 @@ dotenv_1.default.config();
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
-const db_1 = __importDefault(require("./config/db"));
+const db_1 = require("./config/db");
 const api_1 = __importDefault(require("./routes/api"));
 // Constants
 const PORT = process.env.PORT || 3000;
 // Connect to database
-db_1.default.once('open', () => {
-    console.log(('Connected to MongoDB database'));
-    app.listen(PORT, () => {
-        console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
-    });
-});
+(0, db_1.connectDB)();
+// App
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 // parse request bodies (req.body)
@@ -37,7 +33,7 @@ app.use(((err, req, res, next) => {
     res.status(statusCode).json({ message: err.message });
     return;
 }));
-// app.listen(PORT, () => {
-//   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
-// });
+app.listen(PORT, () => {
+    console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
+});
 exports.default = app;

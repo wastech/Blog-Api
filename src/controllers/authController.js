@@ -79,14 +79,14 @@ exports.AuthController = {
             if (!isMatch) {
                 return res
                     .status(400)
-                    .send({ status: "error", message: "Invalid credentials" });
+                    .send({ status: "error", message: "Invalid password" });
             }
             //create token
             const token = jsonwebtoken_1.default.sign({ _id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
                 expiresIn: "1d",
             });
             res.json({
-                message: "Login successful",
+                status: "success",
                 data: { token, user: serializers_1.Serializer.userSerializer(user) },
             });
         }

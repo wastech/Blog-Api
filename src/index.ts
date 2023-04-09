@@ -10,15 +10,19 @@ import express, {
 
 import morgan from "morgan";
 import cors from "cors";
-import { connectDB } from "./config/db";
+import  connectDB  from "./config/db";
 import apiRouter from "./routes/api";
 // Constants
-const PORT = process.env.PORT || 3000;
+const PORT  = process.env.PORT || 3000;
 
 // Connect to database
-connectDB();
+connectDB.once('open', () => {
+  console.log(('Connected to MongoDB database'));
 
-// App
+  app.listen(PORT, () => {
+    console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
+  });
+});
 const app: Express = express();
 app.use(cors());
 // parse request bodies (req.body)
@@ -32,7 +36,7 @@ app.use(morgan("dev"));
 
 
 
-app.use("/api/v1/", apiRouter);
+app.use( apiRouter);
 
 /* Error handler middleware */
 app.use(((err, req, res, next) => {
@@ -43,8 +47,8 @@ app.use(((err, req, res, next) => {
   return;
 }) as ErrorRequestHandler);
 
-app.listen(PORT, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
+// });
 
 export default app;

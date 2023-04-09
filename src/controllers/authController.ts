@@ -73,7 +73,7 @@ export const AuthController = {
       if (!isMatch) {
         return res
           .status(400)
-          .send({ status: "error", message: "Invalid password" });
+          .send({ status: "error", message: "Invalid credentials" });
       }
       //create token
       const token = jwt.sign(
@@ -84,7 +84,7 @@ export const AuthController = {
         }
       );
       res.json({
-        status: "success",
+        message: "Login successful",
         data: { token, user: Serializer.userSerializer(user) },
       });
     } catch (err: any) {
